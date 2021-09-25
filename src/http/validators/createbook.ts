@@ -1,6 +1,4 @@
-import { NextFunction, Request, Response } from "express"
-import { body, validationResult, ValidationError } from "express-validator"
-import { errorValidationHandler } from "../../helpers/functions"
+import {body} from "express-validator"
 import path from "path"
 export function createBookValidator() {
     return [
@@ -16,7 +14,10 @@ export function createBookValidator() {
             .notEmpty()
             .isLength({ min: 3, max: 25 })
             .withMessage("لطفا نام ناشر را با حداقل 5 و حداکثر 25 نویسه وارد کنید"),
-        body("price")
+            body("publishDate")
+            .isDate()
+            .withMessage("لطفا فرمت تاریخ انتشار را به درستی وارد کنید"),
+            body("price")
             .notEmpty()
             .isNumeric()
             .withMessage("لطفا قیمت کتاب را به واحد تومان وارد کنید"),

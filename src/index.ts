@@ -2,10 +2,12 @@ import "reflect-metadata"
 import express, { NextFunction, Request, Response } from "express";
 import cors from "cors"
 import * as dotenv from "dotenv"
-dotenv.config({ path: __dirname + '/.env' })
 import http from "http"
-import AllRoutes from "./routes";
 import mongoose from "mongoose";
+import AllRoutes from "./routes";
+import authPassport from "./passport/passport"
+
+dotenv.config({ path: __dirname + '/.env' })
 const app = express();
 class Application {
     constructor() {
@@ -36,6 +38,8 @@ class Application {
         })
     }
     private configRoutes() {
+        const passportJwt = authPassport()
+        app.use(passportJwt.initialize())
         app.use(AllRoutes)
         app.get("/", (req, res, next) => {
             res.send("Hello World")

@@ -1,5 +1,7 @@
 import fs from "fs";
 import autoBind from "auto-bind"
+import { compareSync, genSaltSync, hashSync } from "bcrypt";
+import jwt from "jsonwebtoken"
 export class Controller {
     constructor() {
         autoBind(this)
@@ -43,12 +45,31 @@ export class Controller {
         })
         return object
     }
-    convertFieldToRegExp(object : any) : any {
+    convertFieldToRegExp(object: any): any {
         Object.keys(object).forEach(key => {
             if (!object[key]) delete object[key]
             if (isNaN(object[key])) object[key] = new RegExp(object[key], "ig")
         })
         console.log(object);
         return object
+    }
+    errorHandler(errors: any, errorList: any) {
+        Object.keys(errors).forEach(key => {
+            errorList[key] = errors[key]
+        })
+    }
+    hashString(string: string) {
+        const salt = genSaltSync(15);
+        const hash = hashSync(string, salt)
+        return hash
+    }
+    verifyHash(data: string, hash: string) {
+        return compareSync(data, hash)
+    }
+    async createJwtToken(payload: any, dayExpire: number) {
+        const expiresIn = (1000 * 60 * 60 * 24 * (dayExpire || 3)) + Date.now();
+        const keyOrSecret = process.env.keySecret || "secretKey"
+        const token = await jwt.sign(payload, keyOrSecret, {expiresIn, algorithm : "HS256"});
+        return token
     }
 }

@@ -9,9 +9,8 @@ class BookController extends Controller {
         try {
             let image = this.getFileName(req.file)
             req.body.image = image
-            req.body.user =  "507f1f77bcf86cd799439011"
+            req.body.user = "507f1f77bcf86cd799439011"
             const bookData: CreateBookDTO = new CreateBookDTO(req.body);
-            console.log({...bookData});
             const book = await bookService.create({ ...bookData })
             return res.status(201).json({
                 status: 201,
@@ -22,12 +21,13 @@ class BookController extends Controller {
             })
         } catch (error: any) {
             console.log(error);
-            
+
             next(error);
         }
     }
     async getAllBooks(req: Request, res: Response, next: NextFunction) {
         try {
+            console.log(req.user);
             const query: SearchBookDTO = req.query;
             const books = await bookService.findAll(query)
             return res.json({
@@ -45,11 +45,11 @@ class BookController extends Controller {
         try {
             const id = req.params.id;
             const result = await bookService.deleteById(id);
-            if(!result) throw {status : 500, message : "حذف کتاب انجام نشد"}
+            if (!result) throw { status: 500, message: "حذف کتاب انجام نشد" }
             return res.status(202).json({
-                status : 202,
-                success : true,
-                message : "حذف کتاب با موفقیت انجام شد"
+                status: 202,
+                success: true,
+                message: "حذف کتاب با موفقیت انجام شد"
             })
         } catch (error) {
             next(error)
@@ -60,9 +60,9 @@ class BookController extends Controller {
             const id = req.params.id;
             const book = await bookService.findById(id);
             return res.status(202).json({
-                status : 200,
-                success : true,
-                result : {
+                status: 200,
+                success: true,
+                result: {
                     book
                 }
             })
