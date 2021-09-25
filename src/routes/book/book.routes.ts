@@ -12,4 +12,5 @@ router.get("/", bookController.getAllBooks)
 router.post("/", passportJwt.authenticate(), uploadImage.single("image"), createBookValidator(), validatorHandler, bookController.createBook)
 router.get("/:id", ObjectId(), validatorHandler, bookController.findBook);
 router.delete("/:id", passportJwt.authenticate(), ObjectId(), validatorHandler, bookController.deleteBook);
+router.patch("/:id",ObjectId(), uploadImage.single("image"), passportJwt.authenticate(), ObjectId(), validatorHandler, bookController.editBook);
 export default router;

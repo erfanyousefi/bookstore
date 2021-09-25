@@ -39,4 +39,12 @@ export class BookService extends Controller {
         if (result.deletedCount > 0) return true
         throw { status: 500, message: "حذف کتاب انجام نشد" }
     }
+    async editBook(_id : any, data: any) {
+        const result = await Book.updateOne({ _id }, { ...data }).catch(err => {
+            throw { status: 500, message: "به روز رسانی انجام نشد، مجددا تلاش بفرمائید" }
+        })
+        if (!(result.acknowledged && result.modifiedCount > 0)) throw { status: 404, message: "به روز رسانی انجام نشد مددا سعی کنید" }
+        const book = await Book.findById(_id);
+        return book
+    }
 }

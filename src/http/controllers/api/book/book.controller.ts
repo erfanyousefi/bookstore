@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { Book } from "../../../../models/books";
 import { Controller } from "../../controllers";
 import { BookService } from "./book.service"
 import { CreateBookDTO } from "./dto/create-book.dto";
@@ -20,8 +21,7 @@ class BookController extends Controller {
                 }
             })
         } catch (error: any) {
-            console.log(error);
-
+            this.removeFileIFAnError(req.file)
             next(error);
         }
     }
@@ -70,6 +70,28 @@ class BookController extends Controller {
             next(error)
         }
     }
+    async editBook(req: Request, res: Response, next: NextFunction) {
+        try {
+            const { id } = req.params;
+            if (req.file) {
+                let image = this.getFileName(req.file)
+                req.body.image = image
+            }
+            const data = req.body;
+            this.removeEmptyField(data);
+            const book = await bookService.editBook(id, data);
+            return res.status(200).json({
+                status: 200,
+                success: true,
+                result: {
+                    book
+                }
+            })
+        } catch (error) {
+            this.removeFileIFAnError(req.file)
+            next(error)
+        }
 
+    }
 }
 export const bookController = new BookController()
