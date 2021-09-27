@@ -30,7 +30,7 @@ yarn strat
 ```bash
 yarn build
 ```
-### users exist
+### users auto create
 ```
 {name : 'admin1', username : 'bookstore1', password : 'A1234567'}
 {name : 'admin2', username : 'bookstore2', password : 'B1234567'}

@@ -23,7 +23,6 @@ class Application {
             console.log("DataBase > connected");
         }).catch(() => {
             console.log("DataBase > Faild");
-
         })
     }
     private configApplication() {
