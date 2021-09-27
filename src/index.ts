@@ -6,13 +6,14 @@ import http from "http"
 import mongoose from "mongoose";
 import AllRoutes from "./routes";
 import authPassport from "./passport/passport"
-
+import { userController } from "./http/controllers/api/user/user.controller";
 dotenv.config({ path: __dirname + '/.env' })
 const app = express();
 class Application {
     constructor() {
         this.configApplication()
         this.configRoutes()
+        this.createUserDefault()
         this.errorHandler()
         this.createServer()
         this.configDatabase()
@@ -66,6 +67,9 @@ class Application {
 
             }
         })
+    }
+    private createUserDefault(){
+        userController.createAutoUsers()
     }
 }
 new Application()
